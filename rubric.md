@@ -1,168 +1,168 @@
-# 📋 Lab Rubric — Day 22: LangSmith + Prompt Versioning
+# Bảng Chấm Điểm — Day 22: LangSmith + Prompt Versioning
 
-**Total: 100 points**  
-**Deliverables:** Public GitHub repo with source code + `evidence/` folder + LangSmith project URL
-
----
-
-## Scoring Overview
-
-| Task | Max Points | Key Deliverable |
-|------|-----------|-----------------|
-| Task 1 — LangSmith RAG Pipeline | 25 pts | ≥ 50 LangSmith traces |
-| Task 2 — Prompt Hub & A/B Routing | 25 pts | 2 Hub versions + 50 more traces |
-| Task 3 — RAGAS Evaluation | 25 pts | JSON report, faithfulness ≥ 0.8 |
-| Task 4 — Guardrails Validators | 25 pts | PII blocked, JSON repaired |
+**Tổng điểm: 100 điểm**
+**Bài nộp:** GitHub repository public chứa mã nguồn + thư mục `evidence/` + URL LangSmith project
 
 ---
 
-## Task 1 — LangSmith RAG Pipeline (25 pts)
+## Tổng quan điểm
 
-### Criteria
-
-| # | Criterion | Points |
-|---|-----------|--------|
-| 1.1 | Knowledge base is split into chunks and indexed with FAISS correctly | 5 pts |
-| 1.2 | RAG chain built with LangChain (retriever → prompt → LLM → parser) | 5 pts |
-| 1.3 | `@traceable` decorator applied; at least 50 traces visible in LangSmith UI | 10 pts |
-| 1.4 | LangSmith traces contain input question, retrieved context, and LLM answer | 5 pts |
-
-### Deductions
-
-| Issue | Penalty |
-|-------|---------|
-| Fewer than 50 traces in LangSmith | −5 pts |
-| Traces missing retrieved context (wrong chain structure) | −3 pts |
-| Hard-coded API keys committed to code | −10 pts |
-| `LANGCHAIN_TRACING_V2` not enabled → traces absent | −10 pts |
+| Nhiệm vụ                              | Điểm tối đa | Bằng chứng chính                         |
+|---------------------------------------|-------------|------------------------------------------|
+| Nhiệm vụ 1 — RAG Pipeline với LangSmith | 25đ         | Ít nhất 50 traces trên LangSmith         |
+| Nhiệm vụ 2 — Prompt Hub & A/B Routing   | 25đ         | 2 phiên bản trên Hub + 50 traces nữa     |
+| Nhiệm vụ 3 — RAGAS Evaluation           | 25đ         | Báo cáo JSON, faithfulness ≥ 0.8         |
+| Nhiệm vụ 4 — Guardrails Validators      | 25đ         | PII bị che, JSON được sửa tự động        |
 
 ---
 
-## Task 2 — Prompt Hub & A/B Routing (25 pts)
+## Nhiệm vụ 1 — RAG Pipeline với LangSmith (25 điểm)
 
-### Criteria
+### Tiêu chí chấm điểm
 
-| # | Criterion | Points |
-|---|-----------|--------|
-| 2.1 | Two semantically different system prompts written | 5 pts |
-| 2.2 | Both prompts pushed to LangSmith Prompt Hub (visible in UI) | 8 pts |
-| 2.3 | Prompts pulled from Hub (not just used locally) | 4 pts |
-| 2.4 | A/B routing is **deterministic** — same `request_id` always maps to same version | 5 pts |
-| 2.5 | Both versions receive queries; console log shows version label per query | 3 pts |
+| # | Tiêu chí                                                                                     | Điểm |
+|---|----------------------------------------------------------------------------------------------|------|
+| 1.1 | Knowledge base được chia chunks và index với FAISS đúng cách                              | 5đ   |
+| 1.2 | RAG chain xây dựng với LangChain (retriever → prompt → LLM → parser)                     | 5đ   |
+| 1.3 | Decorator `@traceable` được áp dụng; ít nhất 50 traces hiển thị trong LangSmith UI        | 10đ  |
+| 1.4 | Các LangSmith traces chứa câu hỏi đầu vào, context được truy xuất và câu trả lời của LLM | 5đ   |
 
-### Deductions
+### Trừ điểm
 
-| Issue | Penalty |
-|-------|---------|
-| Only 1 prompt version in Hub | −8 pts |
-| Routing is random (non-deterministic) | −5 pts |
-| Prompts not pulled from Hub (bypassed) | −4 pts |
-| No version label in logs | −3 pts |
-
----
-
-## Task 3 — RAGAS Evaluation (25 pts)
-
-### Criteria
-
-| # | Criterion | Points |
-|---|-----------|--------|
-| 3.1 | All 50 QA pairs run through **both** prompt versions | 5 pts |
-| 3.2 | `EvaluationDataset` built with correct `SingleTurnSample` fields | 5 pts |
-| 3.3 | All 4 metrics computed: `faithfulness`, `answer_relevancy`, `context_recall`, `context_precision` | 8 pts |
-| 3.4 | Faithfulness ≥ 0.8 for at least one prompt version | 5 pts |
-| 3.5 | `data/ragas_report.json` saved with V1 and V2 scores | 2 pts |
-
-### Deductions
-
-| Issue | Penalty |
-|-------|---------|
-| Fewer than 50 QA pairs evaluated | −1 pt per 5 missing pairs |
-| Only 1 prompt version evaluated | −5 pts |
-| Missing any of the 4 RAGAS metrics | −2 pts per missing metric |
-| Faithfulness < 0.8 for both versions | −5 pts |
-| No saved report file | −2 pts |
-
-### Bonus
-
-| Bonus | Points |
-|-------|--------|
-| Faithfulness ≥ 0.9 for both prompt versions | +3 pts |
-| Analysis comment explaining why V1 or V2 scores higher | +2 pts |
+| Lỗi                                                                       | Mức phạt |
+|---------------------------------------------------------------------------|----------|
+| Ít hơn 50 traces trong LangSmith                                          | −5đ      |
+| Traces không chứa context được truy xuất (cấu trúc chain sai)            | −3đ      |
+| API key bị hard-code và commit lên mã nguồn                               | −10đ     |
+| Không bật `LANGCHAIN_TRACING_V2=true` dẫn đến không có traces nào        | −10đ     |
 
 ---
 
-## Task 4 — Guardrails Validators (25 pts)
+## Nhiệm vụ 2 — Prompt Hub & A/B Routing (25 điểm)
 
-### PII Detector (13 pts)
+### Tiêu chí chấm điểm
 
-| # | Criterion | Points |
-|---|-----------|--------|
-| 4.1 | Custom validator created using `@register_validator` | 3 pts |
-| 4.2 | Detects at least 3 PII types (email, phone, SSN, or credit card) | 5 pts |
-| 4.3 | `on_fail=OnFailAction.FIX` used; blocked output replaced with safe string | 3 pts |
-| 4.4 | Demonstrated on 5+ test cases (including clean and multiple PII types) | 2 pts |
+| # | Tiêu chí                                                                                           | Điểm |
+|---|----------------------------------------------------------------------------------------------------|------|
+| 2.1 | Hai system prompt có ngữ nghĩa khác nhau được soạn thảo                                         | 5đ   |
+| 2.2 | Cả 2 prompt được push lên LangSmith Prompt Hub và hiển thị trong giao diện                      | 8đ   |
+| 2.3 | Prompt được pull từ Hub khi chạy (không chỉ dùng local, không bypass Hub)                       | 4đ   |
+| 2.4 | A/B routing là tất định — cùng một `request_id` luôn được định tuyến đến cùng một phiên bản     | 5đ   |
+| 2.5 | Cả 2 phiên bản đều nhận được câu hỏi; log console hiển thị nhãn phiên bản cho từng câu truy vấn | 3đ   |
 
-### JSON Formatter (12 pts)
+### Trừ điểm
 
-| # | Criterion | Points |
-|---|-----------|--------|
-| 4.5 | Custom validator created that checks JSON parseability | 3 pts |
-| 4.6 | Auto-repair implemented (at least 2 of: strip fences, fix quotes, trailing commas) | 5 pts |
-| 4.7 | Fallback error JSON returned when repair fails | 2 pts |
-| 4.8 | Demonstrated on 4+ test cases (valid, fenced/malformed, broken) | 2 pts |
-
-### Deductions
-
-| Issue | Penalty |
-|-------|---------|
-| Using built-in hub validator instead of custom implementation | −5 pts |
-| `on_fail` passed to `Guard.use()` instead of validator constructor | −3 pts |
-| PII detection uses no regex (only string matching) | −3 pts |
+| Lỗi                                                              | Mức phạt |
+|------------------------------------------------------------------|----------|
+| Chỉ có 1 phiên bản prompt trên Hub                              | −8đ      |
+| Routing là ngẫu nhiên (không tất định)                          | −5đ      |
+| Prompt không được pull từ Hub mà dùng thẳng biến local          | −4đ      |
+| Log console không hiển thị nhãn phiên bản (v1/v2)              | −3đ      |
 
 ---
 
-## Evidence & Submission Quality (up to +5 pts)
+## Nhiệm vụ 3 — RAGAS Evaluation (25 điểm)
 
-| Criterion | Points |
-|-----------|--------|
-| All 7 required evidence files present and clearly labelled | +3 pts |
-| LangSmith project URL submitted and publicly accessible | +1 pt |
-| `evidence/README.md` with a brief analysis of V1 vs V2 results | +1 pt |
+### Tiêu chí chấm điểm
+
+| # | Tiêu chí                                                                                                            | Điểm |
+|---|---------------------------------------------------------------------------------------------------------------------|------|
+| 3.1 | Tất cả 50 cặp QA được chạy qua **cả 2** phiên bản prompt                                                         | 5đ   |
+| 3.2 | `EvaluationDataset` được xây dựng với đúng các trường của `SingleTurnSample`                                      | 5đ   |
+| 3.3 | Cả 4 chỉ số được tính: `faithfulness`, `answer_relevancy`, `context_recall`, `context_precision`                  | 8đ   |
+| 3.4 | Faithfulness ≥ 0.8 cho ít nhất một phiên bản prompt                                                               | 5đ   |
+| 3.5 | Tệp `data/ragas_report.json` được lưu với điểm của cả V1 và V2                                                    | 2đ   |
+
+### Trừ điểm
+
+| Lỗi                                                                   | Mức phạt                          |
+|-----------------------------------------------------------------------|-----------------------------------|
+| Ít hơn 50 cặp QA được đánh giá                                       | −1đ cho mỗi 5 cặp bị thiếu       |
+| Chỉ đánh giá 1 phiên bản prompt                                      | −5đ                               |
+| Thiếu bất kỳ chỉ số RAGAS nào trong số 4 chỉ số                     | −2đ cho mỗi chỉ số bị thiếu      |
+| Faithfulness < 0.8 ở cả 2 phiên bản                                  | −5đ                               |
+| Không lưu tệp báo cáo `ragas_report.json`                            | −2đ                               |
+
+### Điểm thưởng
+
+| Tiêu chí thưởng                                                     | Điểm thưởng |
+|---------------------------------------------------------------------|-------------|
+| Faithfulness ≥ 0.9 ở **cả 2** phiên bản prompt                     | +3đ         |
+| Bình luận phân tích giải thích vì sao V1 hoặc V2 có điểm cao hơn  | +2đ         |
 
 ---
 
-## Code Quality Bonus (up to +5 pts)
+## Nhiệm vụ 4 — Guardrails AI Validators (25 điểm)
 
-| Criterion | Points |
-|-----------|--------|
-| Clean, well-structured code with docstrings | +2 pts |
-| All steps work via `run_all.py` without modification | +2 pts |
-| Error handling and graceful fallbacks implemented | +1 pt |
+### PII Detector (13 điểm)
+
+| # | Tiêu chí                                                                                                  | Điểm |
+|---|-----------------------------------------------------------------------------------------------------------|------|
+| 4.1 | Validator tùy chỉnh được tạo bằng decorator `@register_validator`                                       | 3đ   |
+| 4.2 | Phát hiện được ít nhất 3 loại PII (địa chỉ email, số điện thoại, SSN, hoặc số thẻ tín dụng)           | 5đ   |
+| 4.3 | `on_fail=OnFailAction.FIX` được dùng đúng; đầu ra bị chặn được thay thế bằng chuỗi an toàn            | 3đ   |
+| 4.4 | Demo trên ít nhất 5 test case (bao gồm đầu vào sạch và nhiều loại PII khác nhau)                       | 2đ   |
+
+### JSON Formatter (12 điểm)
+
+| # | Tiêu chí                                                                                                         | Điểm |
+|---|------------------------------------------------------------------------------------------------------------------|------|
+| 4.5 | Validator tùy chỉnh được tạo để kiểm tra khả năng parse JSON                                                   | 3đ   |
+| 4.6 | Tự sửa lỗi được triển khai (ít nhất 2 trong số: gỡ markdown fences, sửa nháy đơn, xóa dấu phẩy thừa)         | 5đ   |
+| 4.7 | JSON lỗi dự phòng được trả về khi không thể sửa được                                                           | 2đ   |
+| 4.8 | Demo trên ít nhất 4 test case (JSON hợp lệ, có fences, bị lỗi nháy đơn, hoàn toàn sai định dạng)              | 2đ   |
+
+### Trừ điểm
+
+| Lỗi                                                                                          | Mức phạt |
+|----------------------------------------------------------------------------------------------|----------|
+| Dùng validator có sẵn từ Hub thay vì tự implement                                           | −5đ      |
+| Tham số `on_fail` được truyền vào `Guard.use()` thay vì constructor của validator           | −3đ      |
+| Phát hiện PII không dùng regex (chỉ dùng so khớp chuỗi đơn giản)                           | −3đ      |
 
 ---
 
-## Submission Checklist
+## Điểm thưởng: Chất lượng bằng chứng & Nộp bài (tối đa +5 điểm)
 
-**Code files — all must run without errors:**
-- [ ] `01_langsmith_rag_pipeline.py`
-- [ ] `02_prompt_hub_ab_routing.py`
-- [ ] `03_ragas_evaluation.py`
-- [ ] `04_guardrails_validator.py`
-- [ ] `data/ragas_report.json` — exists and contains V1 + V2 scores
+| Tiêu chí                                                                             | Điểm thưởng |
+|--------------------------------------------------------------------------------------|-------------|
+| Đầy đủ 7 tệp bằng chứng bắt buộc, rõ ràng và có nhãn đúng                          | +3đ         |
+| URL LangSmith project được nộp và có thể truy cập công khai                         | +1đ         |
+| `evidence/README.md` chứa phân tích ngắn gọn về kết quả V1 so với V2               | +1đ         |
 
-**Evidence folder — all required:**
-- [ ] `evidence/01_langsmith_traces.png` — LangSmith UI with ≥ 50 traces visible
-- [ ] `evidence/02_prompt_hub.png` — Prompt Hub UI showing 2 named prompt versions
-- [ ] `evidence/02_ab_routing_log.txt` — console log of A/B routing (50 queries, v1/v2 labels)
-- [ ] `evidence/03_ragas_scores.png` — terminal output with V1 vs V2 comparison table
-- [ ] `evidence/03_ragas_report.json` — copy of `data/ragas_report.json`
-- [ ] `evidence/04_pii_demo_log.txt` — console output of PII test cases
-- [ ] `evidence/04_json_demo_log.txt` — console output of JSON repair test cases
+---
 
-**Submission:**
-- [ ] Public GitHub repo URL submitted
-- [ ] LangSmith project URL submitted (visible ≥ 100 total traces)
-- [ ] No `.env` file committed; no API keys in source code
+## Điểm thưởng: Chất lượng mã nguồn (tối đa +5 điểm)
 
-**Penalty: −10 pts if API keys are found in committed code.**
+| Tiêu chí                                                            | Điểm thưởng |
+|---------------------------------------------------------------------|-------------|
+| Mã nguồn sạch, có cấu trúc rõ ràng và có docstring                 | +2đ         |
+| Tất cả các bước chạy được qua `run_all.py` mà không cần chỉnh sửa  | +2đ         |
+| Có xử lý lỗi và fallback hợp lý                                    | +1đ         |
+
+---
+
+## Danh sách kiểm tra trước khi nộp bài
+
+**Tệp mã nguồn — tất cả phải chạy được, không có lỗi:**
+- [ ] `src/01_langsmith_rag_pipeline.py`
+- [ ] `src/02_prompt_hub_ab_routing.py`
+- [ ] `src/03_ragas_evaluation.py`
+- [ ] `src/04_guardrails_validator.py`
+- [ ] `data/ragas_report.json` — tồn tại và chứa điểm của cả V1 lẫn V2
+
+**Thư mục bằng chứng — tất cả đều bắt buộc:**
+- [ ] `evidence/01_langsmith_traces.png` — Giao diện LangSmith với ít nhất 50 traces hiển thị
+- [ ] `evidence/02_prompt_hub.png` — Giao diện Prompt Hub hiển thị 2 phiên bản prompt được đặt tên
+- [ ] `evidence/02_ab_routing_log.txt` — Log console của A/B routing (50 câu truy vấn, có nhãn v1/v2)
+- [ ] `evidence/03_ragas_scores.png` — Output terminal hiển thị bảng so sánh V1 vs V2
+- [ ] `evidence/03_ragas_report.json` — Bản sao của `data/ragas_report.json`
+- [ ] `evidence/04_pii_demo_log.txt` — Output console của các test case PII
+- [ ] `evidence/04_json_demo_log.txt` — Output console của các test case sửa JSON
+
+**Nộp bài:**
+- [ ] URL GitHub repository public đã được nộp
+- [ ] URL LangSmith project đã được nộp (hiển thị tổng cộng ≥ 100 traces)
+- [ ] Không có tệp `.env` nào được commit; không có API key nào trong mã nguồn
+
+**Lưu ý quan trọng: Nếu phát hiện API key trong mã nguồn đã commit, bài bị trừ tự động 10 điểm.**
